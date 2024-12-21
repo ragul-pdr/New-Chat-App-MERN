@@ -12,13 +12,14 @@ const Form = ({ receiverId, setChats, chats }) => {
       const response = await axios.post(
         "http://localhost:5000/chat/message/send" + receiverId,{ content: message},  {
             headers: {
-              Authorization: `Bearer ${window.localStorage.getItem(
+              "Authorization": `Bearer ${window.localStorage.getItem(
                 "chat-token"
               )}`,
             },
           }
       );
       setChats([...chats, { content: message, sender: userId }]);
+      setMessage("");
     } catch (error) {
       console.log(error);
     }

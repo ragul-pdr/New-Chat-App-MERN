@@ -12,6 +12,7 @@ import {app,server} from './socket/socket.js'
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'))
 
 
 app.use('/chat/user',AuthRouter)
