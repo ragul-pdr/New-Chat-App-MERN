@@ -11,15 +11,15 @@ import { GetReceiverSocketId,io } from "../socket/socket.js";
 const router = express.Router();
 
 
-router.get("/read/:receiverId", verifyUser, async (req, res) => {
+router.get("/read/:id", verifyUser, async (req, res) => {
   try {
-    const { receiverId } = req.params;
+    const {id  } = req.params;
     const senderId  = req.user._id;
 
-
+    console.log(req.params)
     const conversation = await Conversation.findOne({
       participants: {
-        $all: [senderId, receiverId],
+        $all: [senderId, id],
       },
     });
     if (!conversation) {
@@ -27,7 +27,7 @@ router.get("/read/:receiverId", verifyUser, async (req, res) => {
     }
 
     const messages = await Message.find({
-      conversationId: conversation._id,
+      ConversationId: conversation._id,
     }).sort({
       createdAt: 1,
     });
@@ -44,7 +44,7 @@ router.post("/send/:receiverId", verifyUser, async (req, res) => {
     const { receiverId } = req.params;
     const senderId  = req.user._id;
     const { content } = req.body;
-
+    console.log(receiverId,senderId,req.params)
     let conversation = await Conversation.findOne({
       participants: {
         $all: [senderId, receiverId],
@@ -59,7 +59,8 @@ router.post("/send/:receiverId", verifyUser, async (req, res) => {
     }
 
     const newMessage = new Message({
-      conversationId: conversation._id,
+      
+      ConversationId: conversation._id,
       sender: senderId,
       content: content,
       createdAt: new Date(),
