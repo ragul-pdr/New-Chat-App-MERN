@@ -9,6 +9,7 @@ const Chat = ({ socket }) => {
   const [chatInitiated, setChatInitiated] = useState(false);
   const [chats, setChats] = useState([]);
   const [receiverId, setReceiverId] = useState();
+  
   const [selectedUser, setSelectedUser] = useState({ username: "", image: "", _id: "" });
   const [onlineUsers, setOnlineUsers] = useState([]); 
 
@@ -21,10 +22,11 @@ const Chat = ({ socket }) => {
     socket.on("updateUserList", (users) => {
       setOnlineUsers(users); 
     });
-
+   
     return () => {
       socket.off("updateUserList");
     };
+    
   }, [socket, userId]);
 
   useEffect(() => {
@@ -94,8 +96,8 @@ const Chat = ({ socket }) => {
                 ref={chatContainerRef}
               >
                 {chats &&
-                  chats.map((chat, index) => {
-                    const date = extractTime(chat.createdAt);
+                  chats.map( (chat, index) => {
+                    const date = extractTime( chat.createdAt);
 
                     return (
                       <div
@@ -114,7 +116,7 @@ const Chat = ({ socket }) => {
                           {chat.content}
                         </div>
                         <div className="chat-footer text-xs text-gray-500">
-                          <time className="ml-2">{date}</time>
+                          <time className="ml-2">{ date}</time>
                         </div>
                       </div>
                     );
@@ -126,7 +128,7 @@ const Chat = ({ socket }) => {
           ) : (
             <div className="flex flex-col justify-center items-center h-full">
               <h2 className="text-4xl py-3 bg-opacity-80 font-bold text-gray-200 rounded-2xl p-5 font-Anek">
-                Welcome to Chat App 👋
+               {`Hii ${window.localStorage.getItem("username")} 👋`}
               </h2>
               <br />
               <h3 className="text-3xl py-3 bg-opacity-80 font-bold text-gray-300 rounded-2xl p-5 font-Anek">

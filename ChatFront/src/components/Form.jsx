@@ -33,14 +33,14 @@ const Form = ({ receiverId, setChats, chats }) => {
   };
 
   return (
-    <div className="p-4 absolute bottom-0 right-0 left-0   bg-opacity-50 ">
+    <div className="p-1 pl-3 pr-3 absolute bottom-0 right-0 left-0   bg-opacity-50 ">
       <form onSubmit={sendMessage} className="flex justify-center items-center">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type Your message..."
-          className=" input w-3/4 p-4 mr-3 rounded-full bg-blue-400 bg-opacity-40 "
+          className=" input w-full p-4 mr-3 rounded-full bg-blue-400 bg-opacity-40 "
         />
         <input type="file" className="hidden" id="dile-upload" />
         <button
@@ -58,4 +58,3 @@ const Form = ({ receiverId, setChats, chats }) => {
 export default Form;
 
 
-// 2:43...

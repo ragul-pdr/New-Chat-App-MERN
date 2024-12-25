@@ -14,6 +14,8 @@ const Sidebar = ({
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [activeUser, setActiveUser] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
 
   // search functionality
@@ -71,18 +73,18 @@ const Sidebar = ({
     }
     setChatInitiated(true);
     setReceiverId(receiverId);
-    setActiveUser(receiverId);
+    setSelectedUserId(receiverId);
     setSelectedUser({ username, image, _id: receiverId });
   };
 
   return (
-    <div className="w-1/4 mt-3 flex flex-col border-r p-1 border-gray-800 bg-opacity-70 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent">
+    <div className="w-1/4 mt-3 flex flex-col border-r p-1 border-gray-800 bg-opacity-70 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
       <div>
-        <div className="input flex justify-between items-center rounded-3xl">
+        <div className=" input flex justify-between items-center rounded-3xl p-0">
           <input
             type="text"
-            placeholder="Search"
-            className="input input-bordered bg-gray-100 rounded-3xl w-full"
+            placeholder={`Search`}
+            className="ml-2 p-1 rounded-3xl w-3/4"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -94,19 +96,21 @@ const Sidebar = ({
           {filteredUsers.map((user) => (
             <div
               key={user._id}
-              className="flex items-center justify-between py-2 px-3 border-b hover:bg-gray-200 cursor-pointer"
-              onClick={() =>
-                startChat(user._id, user.username, user.image)
-              }
+              className={`border-b border-slate-600  flex text-white items-center justify-between py-2 px-3  hover:bg-slate-500 bg-opacity-80 hover:rounded-lg cursor-pointer ${
+                selectedUserId === user._id
+                  ? "bg-blue-500 rounded-l text- border-b-0 border-r-4 border-white"
+                  : ""
+              }`}
+              onClick={() => startChat(user._id, user.username, user.image)}
             >
               <div className="flex items-center">
                 <img
                   src={`http://localhost:5000/images/${user.image}`}
                   alt={user.username}
-                  className="w-10 h-10 rounded-full"
+                  className="w-12 h-12 rounded-full"
                 />
                 <div className="ml-2">
-                  <div>{user.username}</div>
+                  <div className="text-l">{user.username}</div>
                   {onlineUsers.includes(user._id) ? (
                     <span className="text-green-500 text-sm">Online</span>
                   ) : (
@@ -114,11 +118,16 @@ const Sidebar = ({
                   )}
                 </div>
               </div>
+              <div className=""></div>
             </div>
           ))}
         </div>
       </div>
-      <LogoutBTN handleLogout={handleLogout} />
+
+      <LogoutBTN
+        className="h-10 bg-blue-500 text-white items-center hover:cursor-pointer hover:bg-red-500 rounded-lg flex justify-center"
+        handleLogout={handleLogout}
+      />
     </div>
   );
 };

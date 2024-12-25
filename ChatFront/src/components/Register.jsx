@@ -12,6 +12,8 @@ const Register = ({ openLogin }) => {
     formData.append("username", username);
     formData.append("password", password);
     formData.append("image", file);
+    window.localStorage.setItem("username", username);
+
     try {
       const response = await axios.post(
         "http://localhost:5000/chat/user/register",

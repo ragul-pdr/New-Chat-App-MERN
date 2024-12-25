@@ -47,17 +47,6 @@ const Home = () => {
         style={{ backgroundImage: "url('./bgmain.png')" }}
         className="bg-cover w-full h-full  flex items-center justify-center"
       >
-        {/* <div className="text-center">
-          <h2 className="text-6xl py-3  bg-indigo-300 bg-opacity-80 font-bold text-gray-900 rounded-2xl p-5 font-Anek">
-            Welcome
-          </h2>
-          <button
-            className="p-3 hover:bg-indigo-600 rounded-lg mt-2 bg-indigo-400 text-white text-3xl"
-            onClick={() => setIsModelOpen(true)}
-          >
-            Login / Register
-          </button>
-        </div> */}
       </div>
       <div className="flex justify-center">
       <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen}>
