@@ -2,7 +2,7 @@ export function extractTime(dateString) {
 	const date = new Date(dateString);
 	const hours = padZero(date.getHours());
 	const minutes = padZero(date.getMinutes());
-	console.log(dateString)
+	// console.log(dateString)
 	return `${hours}:${minutes}`;
 }
 

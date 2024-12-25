@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../components/Sidebar";
 import Form from "../components/Form";
-
 import { FaPhoneAlt, FaVideo } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { extractTime } from "../components/extractTime.js";
@@ -11,16 +9,23 @@ const Chat = ({ socket }) => {
   const [chatInitiated, setChatInitiated] = useState(false);
   const [chats, setChats] = useState([]);
   const [receiverId, setReceiverId] = useState();
-  const [selectedUser, setSelectedUser] = useState({ username: "", image: "" });
+  const [selectedUser, setSelectedUser] = useState({ username: "", image: "", _id: "" });
+  const [onlineUsers, setOnlineUsers] = useState([]); 
 
   const userId = window.localStorage.getItem("userId");
-
-  const navigate = useNavigate();
-  const chatContainerRef = useRef(null); // Ref for the chat container
+  const chatContainerRef = useRef(null); 
 
   useEffect(() => {
     socket.emit("join", userId);
-  }, []);
+
+    socket.on("updateUserList", (users) => {
+      setOnlineUsers(users); 
+    });
+
+    return () => {
+      socket.off("updateUserList");
+    };
+  }, [socket, userId]);
 
   useEffect(() => {
     const handleNewMessages = (message) => {
@@ -38,10 +43,10 @@ const Chat = ({ socket }) => {
     };
   }, [socket, receiverId]);
 
-  // Scroll to the bottom whenever chats change
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chats]);
 
@@ -56,6 +61,7 @@ const Chat = ({ socket }) => {
           setChats={setChats}
           setReceiverId={setReceiverId}
           setSelectedUser={setSelectedUser}
+          onlineUsers={onlineUsers} 
         />
         <div className="w-full flex flex-col bg-opacity-20 relative">
           {chatInitiated ? (
@@ -69,18 +75,23 @@ const Chat = ({ socket }) => {
                   />
                   <span className="font-bold text-lg text-white">
                     {selectedUser.username}
+                    {onlineUsers.includes(selectedUser._id) ? (
+                      <p className="text-green-400 text-xs">Online</p>
+                    ) : (
+                      <p className="text-gray-400 text-xs">Offline</p>
+                    )}
                   </span>
                 </div>
                 <div className="flex items-center text-white hover:cursor-pointer">
-                  <FaPhoneAlt className="mr-10 text-xl rounded-full  hover:text-gray-400   " />
-                  <FaVideo className="mr-10 text-xl   rounded-full hover:text-gray-400   " />
-                  <BsThreeDotsVertical className="mr-1 rounded-full text-xl  hover:text-gray-400   " />
+                  <FaPhoneAlt className="mr-10 text-xl rounded-full hover:text-gray-400" />
+                  <FaVideo className="mr-10 text-xl rounded-full hover:text-gray-400" />
+                  <BsThreeDotsVertical className="mr-1 rounded-full text-xl hover:text-gray-400" />
                 </div>
               </div>
               <div className="divider px-1"></div>
               <div
-                className="overflow-y-auto mb-20 scrollbar-thin scrollbar-border  scrollbar-thumb-blue-600 scrollbar-track-transparent"
-                ref={chatContainerRef} // Ref applied here
+                className="overflow-y-auto mb-20 scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent"
+                ref={chatContainerRef}
               >
                 {chats &&
                   chats.map((chat, index) => {
@@ -102,7 +113,7 @@ const Chat = ({ socket }) => {
                         >
                           {chat.content}
                         </div>
-                        <div className="chat-footer  text-xs text-gray-500">
+                        <div className="chat-footer text-xs text-gray-500">
                           <time className="ml-2">{date}</time>
                         </div>
                       </div>
