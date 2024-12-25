@@ -3,11 +3,7 @@ import http from "http";
 import express from "express";
 
 const app = express();
-
-
-const onlineUsers={
-
-}
+const onlineUsers = {}; // To track online users and their socket IDs
 
 const server = http.createServer(app);
 
@@ -18,19 +14,35 @@ const io = new Server(server, {
   },
 });
 
-export const GetReceiverSocketId =(receiverId)=>{
-  return onlineUsers[receiverId]
-}
+export const GetReceiverSocketId = (receiverId) => {
+  return onlineUsers[receiverId];
+};
 
-io.on('connection',(socket)=>{
-    console.log("User Joined: ",socket.id)
+const emitOnlineUsers = () => {
+  io.emit("updateUserList", Object.keys(onlineUsers));
+};
 
-    socket.on('join',(receiverId)=>{
-            onlineUsers[receiverId]=socket.id
-            console.log("Receiver: ",receiverId);
-            console.log("Socket Id: ",socket.id)
-    })
-})
+io.on("connection", (socket) => {
+  console.log("User Connected:", socket.id);
 
+  socket.on("join", (receiverId) => {
+    onlineUsers[receiverId] = socket.id;
+    console.log(`User ${receiverId} joined with socket ID: ${socket.id}`);
 
-export {app,server,io}
+    emitOnlineUsers();
+  });
+
+  socket.on("disconnect", () => {
+    for (let userId in onlineUsers) {
+      if (onlineUsers[userId] === socket.id) {
+        delete onlineUsers[userId];
+        console.log(`User ${userId} disconnected`);
+        break;
+      }
+    }
+
+    emitOnlineUsers();
+  });
+});
+
+export { app, server, io };
