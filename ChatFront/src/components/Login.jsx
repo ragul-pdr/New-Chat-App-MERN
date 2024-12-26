@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ openSignup }) => {
@@ -17,19 +18,36 @@ const Login = ({ openSignup }) => {
       if (response.data.message === "success") {
         window.localStorage.setItem("chat-token", response.data.token);
         window.localStorage.setItem("userId", response.data.user._id);
+        window.localStorage.setItem(
+          "Loginusername",
+          response.data.user.username
+        );
+        window.localStorage.setItem(
+          "Loginuserimage",
+          response.data.user.userImage
+        );
+        console.log(response.data.user.userImage);
+        console.log(response.data.user.username);
         navigate("/chat");
+        setUsername("");
+        setPassword("");
       }
     } catch (error) {
+      toast.error("Invalid User Credentials !");
       console.log(error);
     }
   };
   return (
     <div className="min-w-96  w-screen h-screen flex justify-center flex-col items-center ">
-      <div  className="w-1/4  h-[1/2 + 50px]   p-6  rounded-2xl shadow-md bg-blue-600 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 border border-gray-100 ">
-        <h2 className="flex text-2xl justify-center items-center text-gray-200">Login</h2>
+      <div className="w-1/4  h-[1/2 + 50px]   p-6  rounded-2xl shadow-md bg-blue-600 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 border border-gray-100 ">
+        <h2 className="flex text-2xl justify-center items-center text-gray-200">
+          Login
+        </h2>
 
-        <form onSubmit={handleSubmit}
-        className=" justify-center flex flex-col  ">
+        <form
+          onSubmit={handleSubmit}
+          className=" justify-center flex flex-col  "
+        >
           <div class="mb-5">
             <label
               for="name"
@@ -63,7 +81,9 @@ const Login = ({ openSignup }) => {
             />
           </div>
           <div className="flex justify-end text-gray-600 mb-3">
-            <a className=" text-white text-sm hover:underline mr-1" href="#">Forgot Password?</a>
+            <a className=" text-white text-sm hover:underline mr-1" href="#">
+              Forgot Password?
+            </a>
           </div>
           <div className="flex justify-center w-full mb-3">
             <button
@@ -75,13 +95,17 @@ const Login = ({ openSignup }) => {
           </div>
         </form>
 
-        
         <div className=" justify-center flex items-center mb-4">
-        <div className="border-b-2 w-1/4 p-2"></div>
+          <div className="border-b-2 w-1/4 p-2"></div>
         </div>
         <div className="flex justify-center">
-          <span className=" text-gray-200">Don't have an account? </span> &nbsp; 
-          <button onClick={openSignup} className="text-gray-100 hover:underline hover:text-blue-400">Sign Up</button>
+          <span className=" text-gray-200">Don't have an account? </span> &nbsp;
+          <button
+            onClick={openSignup}
+            className="text-gray-100 hover:underline hover:text-blue-400"
+          >
+            Sign Up
+          </button>
         </div>
       </div>
     </div>

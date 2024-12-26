@@ -4,31 +4,43 @@ import Form from "../components/Form";
 import { FaPhoneAlt, FaVideo } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { extractTime } from "../components/extractTime.js";
+import FirstSidebar from "../components/FirstSidebar.jsx";
+import ProfileBar from "../components/ProfileBar.jsx";
 
 const Chat = ({ socket }) => {
   const [chatInitiated, setChatInitiated] = useState(false);
   const [chats, setChats] = useState([]);
   const [receiverId, setReceiverId] = useState();
-  
-  const [selectedUser, setSelectedUser] = useState({ username: "", image: "", _id: "" });
-  const [onlineUsers, setOnlineUsers] = useState([]); 
+
+  const [selectedUser, setSelectedUser] = useState({
+    username: "",
+    image: "",
+    _id: "",
+  });
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const userId = window.localStorage.getItem("userId");
-  const chatContainerRef = useRef(null); 
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     socket.emit("join", userId);
 
     socket.on("updateUserList", (users) => {
-      setOnlineUsers(users); 
+      setOnlineUsers(users);
     });
-   
+
     return () => {
       socket.off("updateUserList");
     };
-    
   }, [socket, userId]);
 
+  //   const handleLogout = () => {
+  //   window.localStorage.removeItem("chat-token");
+  //   window.localStorage.removeItem("userId");
+  //   window.localStorage.removeItem("Loginusername");
+  //   setOnlineUsers([]);
+  //   navigate("/");
+  // };
   useEffect(() => {
     const handleNewMessages = (message) => {
       if (receiverId === message.sender) {
@@ -53,22 +65,27 @@ const Chat = ({ socket }) => {
   }, [chats]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
+    <div className="flex items-center  justify-center h-screen">
       <div
         style={{ backgroundImage: "url('./bgmain.png')" }}
-        className="bg-cover w-full h-full flex"
+        className="bg-cover   w-full h-full flex"
       >
-        <Sidebar
-          setChatInitiated={setChatInitiated}
-          setChats={setChats}
-          setReceiverId={setReceiverId}
-          setSelectedUser={setSelectedUser}
-          onlineUsers={onlineUsers} 
-        />
+        <FirstSidebar />
+        {/* handleLogout={()=>(handleLogout())} */}
+        <div className="flex flex-col w-1/4 ">
+        <ProfileBar  />
+          <Sidebar
+            setChatInitiated={setChatInitiated}
+            setChats={setChats}
+            setReceiverId={setReceiverId}
+            setSelectedUser={setSelectedUser}
+            onlineUsers={onlineUsers}
+          />
+        </div>
         <div className="w-full flex flex-col bg-opacity-20 relative">
           {chatInitiated ? (
             <>
-              <div className="h-11 bg-transparent mt-5 flex justify-between items-center p-4">
+              <div className="h-15 bg-slate-500 m-2 ml-1 rounded-lg bg-opacity-20 flex justify-between items-center p-4">
                 <div className="flex items-center space-x-4">
                   <img
                     src={`http://localhost:5000/images/${selectedUser.image}`}
@@ -90,14 +107,14 @@ const Chat = ({ socket }) => {
                   <BsThreeDotsVertical className="mr-1 rounded-full text-xl hover:text-gray-400" />
                 </div>
               </div>
-              <div className="divider px-1"></div>
+              {/* <div className="divider m-0 px-1"></div> */}
               <div
                 className="overflow-y-auto mb-20 scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent"
                 ref={chatContainerRef}
               >
                 {chats &&
-                  chats.map( (chat, index) => {
-                    const date = extractTime( chat.createdAt);
+                  chats.map((chat, index) => {
+                    const date = extractTime(chat.createdAt);
 
                     return (
                       <div
@@ -116,24 +133,28 @@ const Chat = ({ socket }) => {
                           {chat.content}
                         </div>
                         <div className="chat-footer text-xs text-gray-500">
-                          <time className="ml-2">{ date}</time>
+                          <time className="ml-2">{date}</time>
                         </div>
                       </div>
                     );
                   })}
               </div>
 
-              <Form receiverId={receiverId} chats={chats} setChats={setChats} />
+              <Form  receiverId={receiverId} chats={chats} setChats={setChats} />
             </>
           ) : (
-            <div className="flex flex-col justify-center items-center h-full">
-              <h2 className="text-4xl py-3 bg-opacity-80 font-bold text-gray-200 rounded-2xl p-5 font-Anek">
-               {`Hii ${window.localStorage.getItem("username")} 👋`}
+            <div className="flex   flex-col justify-center items-center h-full">
+             <div className=" flex border p-5 rounded-xl flex-col ml-10">
+             <h2 className="text-4xl border-b items-center flex justify-center  py-3 bg-opacity-80 font-bold text-gray-200 rounded-2xl p-5 font-Anek">
+                {`Hii ${window.localStorage.getItem(
+                  "Loginusername"
+                )} 👋`}
               </h2>
               <br />
-              <h3 className="text-3xl py-3 bg-opacity-80 font-bold text-gray-300 rounded-2xl p-5 font-Anek">
+              <h3 className="text-2xl py-3 bg-opacity-80 font-bold text-gray-300 rounded-2xl p-5 font-Anek">
                 Select User! Start Your Conversation...
               </h3>
+             </div>
             </div>
           )}
         </div>

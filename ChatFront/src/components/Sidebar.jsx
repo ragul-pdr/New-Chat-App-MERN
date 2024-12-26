@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LogoutBTN from "./LogoutBTN";
+// import LogoutBTN from "./LogoutBTN";
 import { IoSearch } from "react-icons/io5";
 
 const Sidebar = ({
@@ -13,7 +13,6 @@ const Sidebar = ({
 }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [activeUser, setActiveUser] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,12 +22,8 @@ const Sidebar = ({
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // handle logout
-  const handleLogout = () => {
-    window.localStorage.removeItem("chat-token");
-    window.localStorage.removeItem("userId");
-    navigate("/");
-  };
+
+  
 
   // get all users
   useEffect(() => {
@@ -78,9 +73,9 @@ const Sidebar = ({
   };
 
   return (
-    <div className="w-1/4 mt-3 flex flex-col border-r p-1 border-gray-800 bg-opacity-70 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
+    <div className="h-full rounded-lg flex flex-col  p-2 m-2 ml-1 bg-slate-500  border-gray-800 bg-opacity-20 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
       <div>
-        <div className=" input flex justify-between items-center rounded-3xl p-0">
+        <div className=" input input-bordered flex justify-between items-center rounded-3xl p-0">
           <input
             type="text"
             placeholder={`Search`}
@@ -92,11 +87,12 @@ const Sidebar = ({
             <IoSearch />
           </div>
         </div>
-        <div className="users-list mt-4">
+        <div className="user-list mt-4">
           {filteredUsers.map((user) => (
+            <>
             <div
               key={user._id}
-              className={`border-b border-slate-600  flex text-white items-center justify-between py-2 px-3  hover:bg-slate-500 bg-opacity-80 hover:rounded-lg cursor-pointer ${
+              className={` flex text-white items-center justify-between  p-2   hover:bg-slate-500 bg-opacity-60 hover:rounded-lg cursor-pointer ${
                 selectedUserId === user._id
                   ? "bg-blue-500 rounded-l text- border-b-0 border-r-4 border-white"
                   : ""
@@ -118,16 +114,14 @@ const Sidebar = ({
                   )}
                 </div>
               </div>
-              <div className=""></div>
             </div>
+              <div className="divider m-0 py-0 px-1"></div>
+            </>
           ))}
         </div>
       </div>
 
-      <LogoutBTN
-        className="h-10 bg-blue-500 text-white items-center hover:cursor-pointer hover:bg-red-500 rounded-lg flex justify-center"
-        handleLogout={handleLogout}
-      />
+      
     </div>
   );
 };

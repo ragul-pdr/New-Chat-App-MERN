@@ -72,7 +72,7 @@ async function login(req, res) {
       .json({
         message: "success",
         token,
-        user: { _id: userExist._id, username: userExist.username },
+        user: { _id: userExist._id, username: userExist.username, userImage: userExist.image },
       });
   } catch (error) {
     console.log(error);
