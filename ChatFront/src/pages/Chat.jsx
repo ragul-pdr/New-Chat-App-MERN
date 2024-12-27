@@ -34,13 +34,7 @@ const Chat = ({ socket }) => {
     };
   }, [socket, userId]);
 
-  //   const handleLogout = () => {
-  //   window.localStorage.removeItem("chat-token");
-  //   window.localStorage.removeItem("userId");
-  //   window.localStorage.removeItem("Loginusername");
-  //   setOnlineUsers([]);
-  //   navigate("/");
-  // };
+  
   useEffect(() => {
     const handleNewMessages = (message) => {
       if (receiverId === message.sender) {
@@ -70,10 +64,10 @@ const Chat = ({ socket }) => {
         style={{ backgroundImage: "url('./bgmain.png')" }}
         className="bg-cover   w-full h-full flex"
       >
-        <FirstSidebar />
+        <FirstSidebar  socket={socket} setOnlineUsers={setOnlineUsers}/>
         {/* handleLogout={()=>(handleLogout())} */}
-        <div className="flex flex-col w-1/4 ">
-        <ProfileBar  />
+        <div className="flex flex-col w-1/4">
+        <ProfileBar/>
           <Sidebar
             setChatInitiated={setChatInitiated}
             setChats={setChats}
@@ -143,9 +137,9 @@ const Chat = ({ socket }) => {
               <Form  receiverId={receiverId} chats={chats} setChats={setChats} />
             </>
           ) : (
-            <div className="flex   flex-col justify-center items-center h-full">
+            <div className="flex   flex-col justify-top m-5 items-center h-full">
              <div className=" flex border p-5 rounded-xl flex-col ml-10">
-             <h2 className="text-4xl border-b items-center flex justify-center  py-3 bg-opacity-80 font-bold text-gray-200 rounded-2xl p-5 font-Anek">
+             <h2 className="text-4xl border-b items- flex justify-center  py-3 bg-opacity-80 font-bold text-gray-200 rounded-2xl p-5 font-Anek">
                 {`Hii ${window.localStorage.getItem(
                   "Loginusername"
                 )} 👋`}

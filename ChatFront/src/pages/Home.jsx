@@ -4,6 +4,7 @@ import Register from "../components/Register";
 import Login from "../components/Login";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [isModelOpen, setIsModelOpen] = useState(true);
@@ -16,7 +17,9 @@ const Home = () => {
     setIsModelOpen(true);
     setIsLogin(true);
   };
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const verifyUser = async () => {
       try {
@@ -30,7 +33,6 @@ const Home = () => {
             },
           }
         );
-        console.log(response);
         if (response.data.message === "success") {
           navigate("/chat");
         }
@@ -39,27 +41,29 @@ const Home = () => {
       }
     };
     verifyUser();
-  }, []);
+  }, [navigate]);
 
   return (
-    <div className="flex rounded-lg items-center justify-center h-screen w-screen ">
-      <div
-        style={{ backgroundImage: "url('./bgmain.png')" }}
+    <div className="flex rounded-lg items-center justify-center h-screen w-screen">
+      <motion.div
+        style={{ backgroundImage: "url('../public/bgmain.png')" }}
         className="bg-cover w-full h-full  flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 2 }}
       >
-      </div>
+      </motion.div>
+
       <div className="flex justify-center">
-      <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen}>
-        {isLogin ? (
-         
+        <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen}>
+          {isLogin ? (
             <Login openSignup={openSignup} />
-      
-        ) : (
-          <Register openLogin={openLogin} />
-        )}
-      </Model>
+          ) : (
+            <Register openLogin={openLogin} />
+          )}
+        </Model>
       </div>
-    
     </div>
   );
 };

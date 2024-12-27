@@ -73,7 +73,7 @@ const Sidebar = ({
   };
 
   return (
-    <div className="h-full rounded-lg flex flex-col  p-2 m-2 ml-1 bg-slate-500  border-gray-800 bg-opacity-20 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
+    <div className="h-full  rounded-lg flex flex-col  p-2 m-2 ml-1 bg-slate-500  border-gray-800 bg-opacity-20 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
       <div>
         <div className=" input input-bordered flex justify-between items-center rounded-3xl p-0">
           <input
@@ -87,6 +87,19 @@ const Sidebar = ({
             <IoSearch />
           </div>
         </div>
+
+        <div className="bg-slate-500 bg-opacity-20 p-1 mt-3 rounded-lg flex justify-evenly text-white">
+        <div className="hover:bg-slate-300 p-1 underline hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
+          All
+        </div>
+        <div className="hover:bg-slate-300 p-1 hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
+          Personal
+        </div>
+        <div className="hover:bg-slate-300 p-1 hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
+          Groups
+        </div>
+      </div>
+
         <div className="user-list mt-4">
           {filteredUsers.map((user) => (
             <>
@@ -120,6 +133,8 @@ const Sidebar = ({
           ))}
         </div>
       </div>
+
+      
 
       
     </div>

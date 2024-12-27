@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import LogoutBTN from "./LogoutBTN";
 import { GoHome } from "react-icons/go";
 import { BsChat } from "react-icons/bs";
@@ -7,7 +7,10 @@ import { IoIosSearch } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
-const FirstSidebar = () => {
+
+const userId = window.localStorage.getItem("userId");
+
+const FirstSidebar = ({socket,setOnlineUsers}) => {
   const navigate = useNavigate();
 
   // handle logout
@@ -16,6 +19,11 @@ const FirstSidebar = () => {
     window.localStorage.removeItem("userId");
     window.localStorage.removeItem("Loginusername");
     navigate("/");
+   useEffect(()=>{
+    return () => {
+      socket.off("updateUserList");
+    };
+   },[socket,userId])
   };
   return (
     <div className="flex flex-col   bg-transparent ml-3 rounded-lg bg-opacity-20 m-2 justify-between">

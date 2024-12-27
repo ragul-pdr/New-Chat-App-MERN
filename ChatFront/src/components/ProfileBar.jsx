@@ -10,7 +10,7 @@ const ProfileBar = () => {
         <img
           src={`http://localhost:5000/images/${userImage}`} 
           alt={username || "User Image"} 
-          className="w-14 h-14 rounded-full hover:cursor-pointer hover:bg-blue-500 hover:p-1 hover:bg-opcaity-50 "
+          className="w-14 h-14  rounded-full hover:cursor-pointer hover:bg-blue-500 hover:p-1 hover:bg-opcaity-50 "
         />
       </div>
       <div className="flex flex-col ml-2">
