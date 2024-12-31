@@ -17,13 +17,12 @@ const Sidebar = ({
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [groupInitiated, setGroupInitiated] = useState(false);
+
   // search functionality
   const filteredUsers = users.filter((user) =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-
-  
 
   // get all users
   useEffect(() => {
@@ -75,7 +74,7 @@ const Sidebar = ({
   return (
     <div className="h-full  rounded-lg flex flex-col  p-2 m-2 ml-1 bg-slate-500  border-gray-800 bg-opacity-20 overflow-y-auto scrollbar-thin scrollbar-border scrollbar-thumb-blue-600 scrollbar-track-transparent justify-between">
       <div>
-        <div className=" input input-bordered flex justify-between items-center rounded-3xl p-0">
+        <div className=" input input-bordered flex  justify-between items-center rounded-3xl p-0">
           <input
             type="text"
             placeholder={`Search`}
@@ -88,55 +87,107 @@ const Sidebar = ({
           </div>
         </div>
 
-        <div className="bg-slate-500 bg-opacity-20 p-1 mt-3 rounded-lg flex justify-evenly text-white">
-        <div className="hover:bg-slate-300 p-1 underline hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
-          All
-        </div>
-        <div className="hover:bg-slate-300 p-1 hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
-          Personal
-        </div>
-        <div className="hover:bg-slate-300 p-1 hover:rounded-3xl hover:cursor-pointer w-1/2 justify-center flex hover:bg-opacity-20">
-          Groups
-        </div>
-      </div>
+        <div className="bg-slate-500 gap-2 bg-opacity-20 p-2 mt-3 rounded-lg flex justify-evenly text-white">
+          <div
+            onClick={() => setGroupInitiated(false)}
+            className={`hover:bg-slate-300 p-2 ${
+              groupInitiated ? "" : "bg-opacity-20 bg-slate-300 rounded-3xl"
+            } hover:rounded-3xl hover:cursor-pointer w-10/12 justify-center flex hover:bg-opacity-20`}
+          >
+            All
+          </div>
 
-        <div className="user-list mt-4">
-          {filteredUsers.map((user) => (
-            <>
-            <div
-              key={user._id}
-              className={` flex text-white items-center justify-between  p-2   hover:bg-slate-500 bg-opacity-60 hover:rounded-lg cursor-pointer ${
-                selectedUserId === user._id
-                  ? "bg-blue-500 rounded-l text- border-b-0 border-r-4 border-white"
-                  : ""
-              }`}
-              onClick={() => startChat(user._id, user.username, user.image)}
-            >
-              <div className="flex items-center">
-                <img
-                  src={`http://localhost:5000/images/${user.image}`}
-                  alt={user.username}
-                  className="w-12 h-12 rounded-full"
-                />
-                <div className="ml-2">
-                  <div className="text-l">{user.username}</div>
-                  {onlineUsers.includes(user._id) ? (
-                    <span className="text-green-500 text-sm">Online</span>
-                  ) : (
-                    <span className="text-gray-500 text-sm"></span>
-                  )}
+          <div
+            onClick={() => setGroupInitiated(true)}
+            className={`hover:bg-slate-300 p-2 ${
+              groupInitiated ? "bg-opacity-20 bg-slate-300 rounded-3xl" : ""
+            } hover:rounded-3xl hover:cursor-pointer w-10/12 justify-center flex hover:bg-opacity-20`}
+          >
+            {" "}
+            Groups
+          </div>
+        </div>
+
+        {groupInitiated ? (
+          // "Group Clicked. Groups comming soon..."
+          <div className="mt-4">
+              <>
+                <div
+                  // key={user._id}
+                  className={` flex text-white items-center justify-between  p-2   hover:bg-slate-500 bg-opacity-60 hover:rounded-lg cursor-pointer`}
+                  // onClick={() => startChat(user._id, user.username, user.image)}
+                >
+                  <div className="flex items-center">
+                    <img
+                      src=''
+                      alt='gname'
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="ml-2">
+                      <div className="text-l">Group Name</div>
+                      
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-              <div className="divider m-0 py-0 px-1"></div>
-            </>
-          ))}
-        </div>
+                <div className="divider m-0 py-0 px-1"></div>
+              </>
+          </div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        ) : (
+          <div className="user-list mt-4">
+            {filteredUsers.map((user) => (
+              <>
+                <div
+                  key={user._id}
+                  className={` flex text-white items-center justify-between  p-2   hover:bg-slate-500 bg-opacity-60 hover:rounded-lg cursor-pointer ${
+                    selectedUserId === user._id
+                      ? "bg-blue-500 rounded-l text- border-b-0 border-r-4 border-white"
+                      : ""
+                  }`}
+                  onClick={() => startChat(user._id, user.username, user.image)}
+                >
+                  <div className="flex items-center">
+                    <img
+                      src={`http://localhost:5000/images/${user.image}`}
+                      alt={user.username}
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div className="ml-2">
+                      <div className="text-l">{user.username}</div>
+                      {onlineUsers.includes(user._id) ? (
+                        <span className="text-green-500 text-sm">Online</span>
+                      ) : (
+                        <span className="text-gray-500 text-sm"></span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="divider m-0 py-0 px-1"></div>
+              </>
+            ))}
+          </div>
+        )}
       </div>
-
-      
-
-      
     </div>
   );
 };
