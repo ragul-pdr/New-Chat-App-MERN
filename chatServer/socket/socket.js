@@ -43,6 +43,31 @@ io.on("connection", (socket) => {
 
     emitOnlineUsers();
   });
+
+
+
+  //for groups
+  const groupSocketMap = {}; 
+
+  socket.on("joinGroup", (groupId) => {
+    if (!groupSocketMap[groupId]) {
+      groupSocketMap[groupId] = [];
+    }
+    groupSocketMap[groupId].push(socket.id);
+
+    io.to(groupId).emit("userJoined", socket.id);
+  });
+
+  socket.on("disconnect", () => {
+    for (const groupId in groupSocketMap) {
+      const index = groupSocketMap[groupId].indexOf(socket.id);
+      if (index !== -1) {
+        groupSocketMap[groupId].splice(index, 1);
+        io.to(groupId).emit("userLeft", socket.id);
+      }
+    }
+  });
 });
+
 
 export { app, server, io };

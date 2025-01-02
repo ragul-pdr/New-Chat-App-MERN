@@ -8,7 +8,7 @@ import Message from "../models/Messages.js";
 import { GetReceiverSocketId,io } from "../socket/socket.js";
 
 
-const router = express.Router();
+const  router = express.Router();
 
 
 router.get("/read/:id", verifyUser, async (req, res) => {
